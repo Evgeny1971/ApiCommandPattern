@@ -11,9 +11,10 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WinFormsApp1
-{  
-     public interface IDbConnectionFactory {
+namespace WinFormsApp1.Accessors
+{
+    public interface IDbConnectionFactory
+    {
         SqlConnection GetConnection(string connectionStringName);
         SqlConnection GetConnection();
     }
@@ -22,12 +23,12 @@ namespace WinFormsApp1
         string _connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=CommandDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;";
 
         //string _connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=CommandDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
-        public DbConnectionFactory() {  } 
-        public SqlConnection GetConnection(string connectionStringName) 
-        { 
-            _connectionString = connectionStringName; 
-            SqlConnection conn = new SqlConnection(_connectionString); 
-            return conn; 
+        public DbConnectionFactory() { }
+        public SqlConnection GetConnection(string connectionStringName)
+        {
+            _connectionString = connectionStringName;
+            SqlConnection conn = new SqlConnection(_connectionString);
+            return conn;
         }
 
         public SqlConnection GetConnection()

@@ -1,6 +1,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using System;
+using WinFormsApp1.Accessors;
+using WinFormsApp1.InterfacesApi;
+using WinFormsApp1.Engine;
+using WinFormsApp1.Controllers;
 
 namespace WinFormsApp1
 {

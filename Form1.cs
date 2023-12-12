@@ -1,59 +1,33 @@
 using Microsoft.VisualBasic.ApplicationServices;
+using WinFormsApp1.InterfacesApi;
+using WinFormsApp1.Entities;
 
 namespace WinFormsApp1
 {
     public partial class Form1 : Form
     {
         private readonly ICommand _command;
-        private readonly IRecentDataAccessor _recentDataAccessor;
-
-        public Form1(ICommand command, IRecentDataAccessor recentDataAccessor)
+        private readonly EntityCalculator _entityCalculator = null;
+        public Form1(ICommand command)
         {
+            _entityCalculator = new EntityCalculator();
             _command = command;
-            _recentDataAccessor = recentDataAccessor;
             InitializeComponent();
             FillComboOperators();
-            /*
-             IEnumerable<string> operators = _recentDataAccessor.GetOperators();
-             foreach (var item in operators)
-             {
-                 comboBox1.Items.Add(item);
-
-             }
-            */
+            comboBox1.SelectedIndex = 0;
+            textBox1.Text ="1";
+            textBox2.Text = "2";
+         
         }
 
         private void FillComboOperators()
         {
-            IEnumerable<string> operators = _recentDataAccessor.GetOperators();
+            IEnumerable<string> operators = _command.GetOperators();
             comboBox1.Items.Clear();
             foreach (var item in operators)
             {
                 comboBox1.Items.Add(item);
             }
-            comboBox1.SelectedIndex = 0;
-        }
-
-        public void Invoke()
-        {
-            // Create user and let her compute
-
-
-            // User presses calculator buttons
-
-
-
-
-            // Undo 4 commands
-
-
-            // Redo 3 commands
-
-
-            // Wait for user
-
-            //this.richTextBox1.Text = result;
-            //Console.ReadKey();
         }
 
         private void label3_Click(object sender, EventArgs e)
@@ -64,24 +38,26 @@ namespace WinFormsApp1
         private void button2_Click(object sender, EventArgs e)
         {
             /// Compute
-            int operand1 = int.Parse(textBox1.Text);
-            int operand2 = int.Parse(textBox2.Text);
-            string @operator = comboBox1.Text;
-            string result = _command.ExecuteGetResult(operand1, @operator, operand2);
-            richTextBox1.Text = result;
+            _entityCalculator.Operand1 = int.Parse(textBox1.Text);
+            _entityCalculator.Operand2  = int.Parse(textBox2.Text);
+            _entityCalculator.Operator  = comboBox1.Text;
+            _command.ExecuteGetResult(_entityCalculator);
+            richTextBox1.Text = _entityCalculator.Result;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string @operator = textBox3.Text;
-            if (!string.IsNullOrEmpty(@operator))
+            _entityCalculator.Operator = textBox3.Text;
+            if (!string.IsNullOrEmpty(_entityCalculator.Operator))
             {
-                bool isSuccess = _recentDataAccessor.InsertNewOperator(@operator);
+                //bool isSuccess = _recentDataAccessor.InsertNewOperator(@operator);
+
+                bool isSuccess=_command.InsertNewOperator(_entityCalculator);
                 if (isSuccess)
                 {
                     FillComboOperators();
-                    comboBox1.Text = @operator;
-                    comboBox1.SelectedText = @operator;
+                    comboBox1.Text = _entityCalculator.Operator;
+                    //comboBox1.SelectedText = _entityCalculator.Operator;
                 }
             }
 

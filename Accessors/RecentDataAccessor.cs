@@ -1,98 +1,13 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Diagnostics.Eventing.Reader;
-using WinFormsApp1.Accessors;
 
-namespace WinFormsApp1
+namespace WinFormsApp1.Accessors
 {
-    /// <summary>
-    /// The 'Command' abstract class
-    /// </summary>
-
-    public interface ICommand
-    {
-        public string ExecuteGetResult(int operand1, string @operator, int operand);
-    }
-
-    /// <summary>
-    /// The 'ConcreteCommand' class
-    /// </summary>
-
-    public class CalculatorCommand : ICommand
-    {
-        char @operator;
-        int operand;
-        Calculator _calculator;
-
-        // Constructor
-
-        public CalculatorCommand(Calculator calculator)
-        {
-            _calculator = calculator;
-        }
-
-        // Gets operator
-
-
-
-        // Execute new command
-
-        public string ExecuteGetResult(int operand1, string @operator, int operand2)
-        {
-            _calculator.Operation(operand1,@operator, operand2);
-            return _calculator.Result;
-        }
-
-        // Unexecute last command
-
-
-    }
-
-    /// <summary>
-    /// The 'Receiver' class
-    /// </summary>
-
-    public class Calculator
-    {
-        int curr = 0;
-        string _result = string.Empty;
-        private readonly IRecentDataAccessor _recentDataAccessor;
-
-        public Calculator(IRecentDataAccessor recentDataAccessor)
-        {
-                _recentDataAccessor = recentDataAccessor;
-        }
-        public string Result { get { return _result; } }
-
-        public void Operation(int operand1, string @operator, int operand2)
-        {
-            bool isRunSql = false;
-            switch (@operator)
-            {
-                case "+": operand1 += operand2; break;
-                case "-": operand1 -= operand2; break;
-                case "*": operand1 *= operand2; break;
-                case "/": operand1 /= operand2; break;
-                default:
-                    // code block
-                    isRunSql=true;
-                break;
-            }
-            _result = $"Result = {operand1}; (operator={@operator}, operand2={operand2})";
-            if (isRunSql) 
-            {
-               string resultSql= _recentDataAccessor.ExecuteOperator(operand1, @operator, operand2);
-               _result=$"Result = {resultSql} ;(operator={@operator}; @param1={operand1}, @param2={operand2})";
-            }
-        }
-    }
-
     public interface IRecentDataAccessor
     {
         IEnumerable<string> GetOperators();
@@ -108,7 +23,7 @@ namespace WinFormsApp1
         {
             _connectionFactory = connectionFactory;
         }
-///
+        ///
         public string ExecuteOperator(int operand1, string @operator, int operand2)
         {
             string result = string.Empty;
@@ -132,7 +47,7 @@ namespace WinFormsApp1
             return result;
         }
 
-        public  IEnumerable<string> GetOperators()
+        public IEnumerable<string> GetOperators()
         {
             using (var conn = _connectionFactory.GetConnection())
             {
@@ -142,7 +57,7 @@ namespace WinFormsApp1
                     SqlDataReader reader;
                     cmd.CommandType = CommandType.StoredProcedure;
                     conn.Open();
-                    reader =  cmd.ExecuteReader();
+                    reader = cmd.ExecuteReader();
                     ///
                     while (reader.Read())
                     {
@@ -171,4 +86,5 @@ namespace WinFormsApp1
             }
         }
     }
+
 }
