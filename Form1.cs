@@ -12,21 +12,35 @@ namespace WinFormsApp1
             _command = command;
             _recentDataAccessor = recentDataAccessor;
             InitializeComponent();
-            Invoke();
-            _recentDataAccessor.GetOperators();
+            FillComboOperators();
+            /*
+             IEnumerable<string> operators = _recentDataAccessor.GetOperators();
+             foreach (var item in operators)
+             {
+                 comboBox1.Items.Add(item);
 
+             }
+            */
         }
 
-        public  void Invoke()
+        private void FillComboOperators()
+        {
+            IEnumerable<string> operators = _recentDataAccessor.GetOperators();
+            comboBox1.Items.Clear();
+            foreach (var item in operators)
+            {
+                comboBox1.Items.Add(item);
+            }
+            comboBox1.SelectedIndex = 0;
+        }
+
+        public void Invoke()
         {
             // Create user and let her compute
 
 
             // User presses calculator buttons
 
-           string result = _command.ExecuteGetResult('+', 100);
-             result = _command.ExecuteGetResult('-', 50);
-             result = _command.ExecuteGetResult('*', 4);
 
 
 
@@ -38,11 +52,44 @@ namespace WinFormsApp1
 
             // Wait for user
 
-            this.richTextBox1.Text = result;
+            //this.richTextBox1.Text = result;
             //Console.ReadKey();
         }
-     
 
-     
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            /// Compute
+            int operand1 = int.Parse(textBox1.Text);
+            int operand2 = int.Parse(textBox2.Text);
+            string @operator = comboBox1.Text;
+            string result = _command.ExecuteGetResult(operand1, @operator, operand2);
+            richTextBox1.Text = result;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string @operator = textBox3.Text;
+            if (!string.IsNullOrEmpty(@operator))
+            {
+                bool isSuccess = _recentDataAccessor.InsertNewOperator(@operator);
+                if (isSuccess)
+                {
+                    FillComboOperators();
+                    comboBox1.Text = @operator;
+                    comboBox1.SelectedText = @operator;
+                }
+            }
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

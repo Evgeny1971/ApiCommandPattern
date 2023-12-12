@@ -19,7 +19,9 @@ namespace WinFormsApp1
     }
     public class DbConnectionFactory : IDbConnectionFactory
     {
-        string _connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=CommandDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
+        string _connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=CommandDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;";
+
+        //string _connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=CommandDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
         public DbConnectionFactory() {  } 
         public SqlConnection GetConnection(string connectionStringName) 
         { 
