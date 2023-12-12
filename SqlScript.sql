@@ -57,7 +57,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-alter  PROCEDURE [dbo].[stp_ExecuteOperator]
+create  PROCEDURE [dbo].[stp_ExecuteOperator]
 	@operator nvarchar(50),
 	@operand1 int,
 	@operand2 int

@@ -13,6 +13,8 @@ namespace WinFormsApp1
             {
                 var serviceProvider = new ServiceCollection()
                     .AddSingleton<Calculator>()
+                    .AddSingleton<IDbConnectionFactory,DbConnectionFactory>()
+                    .AddScoped<IRecentDataAccessor,RecentDataAccessor>()
                     .AddScoped<ICommand, CalculatorCommand>()
                     .AddScoped<Form1>()
 

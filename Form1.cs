@@ -5,13 +5,16 @@ namespace WinFormsApp1
     public partial class Form1 : Form
     {
         private readonly ICommand _command;
+        private readonly IRecentDataAccessor _recentDataAccessor;
 
-        public Form1(ICommand command)
+        public Form1(ICommand command, IRecentDataAccessor recentDataAccessor)
         {
             _command = command;
-
+            _recentDataAccessor = recentDataAccessor;
             InitializeComponent();
             Invoke();
+            _recentDataAccessor.GetOperators();
+
         }
 
         public  void Invoke()
